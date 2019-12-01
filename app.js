@@ -16,7 +16,7 @@ io.on('connection', function(socket){
 	});
 });
 
-http.get('/', function(req, res){
+app.get('/', function(req, res){
 	res.send('WebSocket Server, no HTTP Server');
 });
 
