@@ -16,7 +16,12 @@ io.on('connection', function(socket){
 	});
 });
 
+http.get('/', function(req, res){
+	res.send('WebSocket Server, no HTTP Server');
+});
 
-http.listen(3004, function(){
+port = process.env.PORT || 3004;
+
+http.listen(port, function(){
 	console.log('listening on *:3004');
 });
