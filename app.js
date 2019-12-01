@@ -1,11 +1,13 @@
-var app = require('express')();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
-
+app.use(bodyParser.json());
 app.use(cors())
-
+port = process.env.PORT || 3004;
 
 io.on('connection', function(socket){
 	console.log('Nueva Conexion');
@@ -17,10 +19,14 @@ io.on('connection', function(socket){
 });
 
 app.get('/', function(req, res){
-	res.send('WebSocket Server, no HTTP Server');
+	res.send('WebSocket y Gateway Server, no HTTP Server');
 });
 
-port = process.env.PORT || 3004;
+app.use('/api/diseniovotacion', require('./api/disenio_routes'));
+app.use('/api/manejo_mesa', require('./api/manejo_routes'));
+app.use('/api/registro_participantes', require('./api/registro_routes'));
+app.use('/api/votacion', require('./api/votacion_routes'));
+
 
 http.listen(port, function(){
 	console.log('listening on *:3004');
