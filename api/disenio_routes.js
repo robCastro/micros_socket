@@ -39,7 +39,7 @@ router.post('/votaciones/', function(req, res){
 		//-1 para que el solo maneje las particiones, 'crear' para que todos los msjs con ese tag
 		//esten en la misma particion
 		kafkaProducer.produce(topic, -1, Buffer.from(JSON.stringify(req.body)), 'crear');
-		res.sendStatus(200);
+		res.status(200).json(req.body);
 	}
 	catch(err){
 		console.log('Error enviando el mensaje', err);
