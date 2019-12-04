@@ -18,12 +18,27 @@ router.get('/votaciones/:id', function(req, res){
 });
 
 router.post('/votaciones/', function(req, res){
+	if (isNaN(parseInt(req.body.ordenamiento.id_ordenamiento)) || isNaN(parseInt(req.body.tipoVotacion.id_tipo_votacion))){
+		res.status(400).json({msg: 'Usar parametros numericos'});
+		return;
+	}
+	let fechaInicio = new Date(req.body.fecha_inicio_votacion);
+	let fechaFin = new Date(req.body.fecha_fin_votacion);
+	if(!fechaInicio instanceof Date || isNaN(fechaInicio)){
+		res.status(400).json({msg: 'Fecha de inicio no valida'});
+		return;
+	}
+	if(!fechaFin instanceof Date || isNaN(fechaFin)){
+		res.status(400).json({msg: 'Fecha de fin no valida'});
+		return;
+	}
 	try{
 		//topic = prefijo + topic como tal
 		topic = process.env.CLOUDKARAFKA_TOPIC_PREFIX + 'Votacion'
 		console.log(topic);
-		//-1 para que el solo maneje las particiones
-		kafkaProducer.produce(topic, -1, Buffer.from(JSON.stringify(req.body)));
+		//-1 para que el solo maneje las particiones, 'crear' para que todos los msjs con ese tag
+		//esten en la misma particion
+		kafkaProducer.produce(topic, -1, Buffer.from(JSON.stringify(req.body)), 'crear');
 		res.sendStatus(200);
 	}
 	catch(err){

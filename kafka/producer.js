@@ -2,7 +2,10 @@ const Kafka = require("node-rdkafka");
 require('dotenv').config();
 
 const kafkaConf = {
-  "group.id": "cloudkarafka-example",
+  //"group.id": "cloudkarafka-example",
+  //acks por defecto = all
+  //Info: https://github.com/edenhill/librdkafka/blob/v1.2.2/CONFIGURATION.md
+  "client.id": "gateway",
   "metadata.broker.list": process.env.CLOUDKARAFKA_BROKERS.split(","),
   "socket.keepalive.enable": true,
   "security.protocol": "SASL_SSL",
