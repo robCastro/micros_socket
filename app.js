@@ -5,6 +5,8 @@ const io = require('socket.io')(http);
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+const kafkaProducer = require('./kafka/producer');
+
 app.use(bodyParser.json());
 app.use(cors())
 port = process.env.PORT || 3004;
@@ -21,6 +23,7 @@ io.on('connection', function(socket){
 app.get('/', function(req, res){
 	res.send('WebSocket y Gateway Server, no HTTP Server');
 });
+
 
 app.use('/api/diseniovotacion', require('./api/disenio_routes'));
 app.use('/api/manejo_mesa', require('./api/manejo_routes'));

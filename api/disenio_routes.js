@@ -1,11 +1,11 @@
 'use_strict';
 const express = require('express');
 const router = express.Router();
-const Request = require("request");
-
+const kafkaProducer = require('../kafka/producer');
 
 const url_produccion = 'https://diseniovotacion.herokuapp.com/api/diseniovotacion/';
 const url_local = 'http://localhost:3000/api/diseniovotacion/'
+
 
 const url = url_produccion;
 
@@ -18,8 +18,21 @@ router.get('/votaciones/:id', function(req, res){
 });
 
 router.post('/votaciones/', function(req, res){
+	try{
+		//topic = prefijo + topic como tal
+		topic = process.env.CLOUDKARAFKA_TOPIC_PREFIX + 'Votacion'
+		console.log(topic);
+		//-1 para que el solo maneje las particiones
+		kafkaProducer.produce(topic, -1, Buffer.from(JSON.stringify(req.body)));
+		res.sendStatus(200);
+	}
+	catch(err){
+		console.log('Error enviando el mensaje', err);
+		res.status(500).json({msg: 'Error enviando el mensaje a Kafka'});
+		return;
+	}
 	// 307 para conservar el verbo post
-	res.redirect(307, `${url}votaciones/`);
+	//res.redirect(307, `${url}votaciones/`);
 });
 
 router.get('/mesas/:id', function(req, res){
