@@ -59,6 +59,28 @@ router.get('/mesas/', function(req, res){
 });
 
 // Para topic
+router.put('/mesas/:id_mesa/anular', function(req, res){
+	if (isNaN(parseInt(req.params.id_mesa))){
+		res.status(400).json({msg: 'Usar parametros numericos'});
+		return;
+	}
+	try{
+		topic = process.env.CLOUDKARAFKA_TOPIC_PREFIX + 'Anular'
+		console.log(topic);
+		let mensaje = {
+			"id_mesa": req.params.id_mesa,
+			"anular": req.body.anular
+		}
+		kafkaProducer.produce(topic, -1, Buffer.from(JSON.stringify(mensaje)), 'anular');
+		res.sendStatus(204);
+	}
+	catch(err){
+		console.log('Error enviando el mensaje', err);
+		res.status(500).json({msg: 'Error enviando el mensaje a Kafka'});
+		return;
+	}
+});
+
 router.put('/mesas/:id', function(req, res){
 	res.redirect(307, `${url}mesas/${req.params.id}`);
 });
@@ -70,5 +92,7 @@ router.get('/tipo_votacion/', function(req, res){
 router.get('/ordenamiento/', function(req, res){
 	res.redirect(`${url}ordenamiento/`);
 });
+
+
 
 module.exports = router;
