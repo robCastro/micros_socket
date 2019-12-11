@@ -1,14 +1,13 @@
 const express = require('express');
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
 const cors = require('cors');
+const http = require('http').createServer(app.use(cors()));
+const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
-
 const kafkaProducer = require('./kafka/producer');
 
 app.use(bodyParser.json());
-app.use(cors())
+
 port = process.env.PORT || 3004;
 
 io.on('connection', function(socket){

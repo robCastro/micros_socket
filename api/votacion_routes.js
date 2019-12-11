@@ -52,6 +52,7 @@ router.put('/candidato/:id_candidato/:id_mesa/', function(req, res){
 });
 
 router.post('/candidato/', function(req,res){
+	console.log('req', req);
 	res.redirect(307, `${url}candidato`);
 });
 
