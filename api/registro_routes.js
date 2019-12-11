@@ -11,7 +11,18 @@ const url = url_produccion;
 
 
 router.get('/personas/', function(req, res){
-	res.redirect(`${url}personas/`);
+	let urlString = `${url}personas`;
+	if(Object.keys(req.query).length > 0){
+		urlString = urlString + '?';
+		Object.keys(req.query).forEach(parametro => {
+			urlString = urlString + parametro + "=" + req.query[parametro] + "&";
+		});
+		res.redirect(urlString);
+		return;
+	}
+	else{
+		res.redirect(`${urlString}`);
+	}
 });
 router.get('/personas/:id', function(req, res){
 	res.redirect(`${url}personas/${req.params.id}`);
