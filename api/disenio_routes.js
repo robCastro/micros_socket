@@ -55,7 +55,19 @@ router.get('/mesas/:id', function(req, res){
 });
 
 router.get('/mesas/', function(req, res){
-	res.redirect(`${url}mesas/`);
+	let urlString = `${url}mesas/`;
+	if(Object.keys(req.query).length > 0){
+		urlString = urlString + '?';
+		Object.keys(req.query).forEach(parametro => {
+			urlString = urlString + parametro + "=" + req.query[parametro] + "&";
+		});
+		console.log(urlString);
+		res.redirect(urlString);
+		return;
+	}
+	else{
+		res.redirect(`${urlString}`);
+	}
 });
 
 // Para topic
