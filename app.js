@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const http = require('http').createServer(app);
+const http = require('http').createServer(app.use(cors()));
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
 const kafkaProducer = require('./kafka/producer');
@@ -31,5 +31,5 @@ app.use('/api/votacion', require('./api/votacion_routes'));
 
 
 http.listen(port, function(){
-	console.log('listening on *:3004');
+	console.log('listening on *: ' + port);
 });
