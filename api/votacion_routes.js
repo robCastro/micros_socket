@@ -51,9 +51,8 @@ router.put('/candidato/:id_candidato/:id_mesa/', function(req, res){
 	//res.redirect(`${url}candidato/${req.params.id_candidato}/${req.params.id_mesa}`);
 });
 
-router.post('/candidato/', function(req,res){
-	console.log('req', req);
+/*router.post('/candidato/', function(req,res){
 	res.redirect(307, `${url}candidato`);
-});
+});*/
 
 module.exports = router;
