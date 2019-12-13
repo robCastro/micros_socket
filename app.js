@@ -13,9 +13,9 @@ port = process.env.PORT || 3004;
 io.on('connection', function(socket){
 	console.log('Nueva Conexion');
 
-	socket.on('abrir', function(id_mesa){
-		console.log(id_mesa);
-		io.emit('desbloquear', id_mesa);
+	socket.on('abrir', function(mensaje){
+		console.log(mensaje);
+		io.emit('desbloquear', mensaje);
 	});
 });
 
